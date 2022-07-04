@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+
+        <!-- Bootstrap 5.1.3 Styling Sheet -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <!-- Latest Datatable Styling Sheet -->
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        
+        <!-- Main Styling Sheet -->
+        <link href="{{ asset('bundles/admin/css/styles.css') }}" rel="stylesheet" />
+        
+        <!-- Custom Style Sheets Section -->
+        {% block stylesheets %}{% endblock %}
+        
+        <!-- Font Awesome Js Library -->
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        
+        <!-- Logo du site -->
+        <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
+        <title>One Piece Quiz</title>
+    </head>
+    <body class="sb-nav-fixed sb-sidenav-toggled">
+        {% include "@Admin/partials/navbar.html.twig" %}
+        <div id="layoutSidenav">            
+            <div id="layoutSidenav_content">
+                {% include "@Admin/partials/sidebar.html.twig" %}
+                <main>
+                    <div class="container-fluid px-4">
+                        {# <h1 class="mt-4">Dashboard</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol> #}
+                        {% block main %}
+                        {% endblock %}
+                    </div>
+                </main>
+                {% include "@Admin/partials/footer.html.twig" %}                
+            </div>
+        </div>
+        
+        <!-- Bootstrap 5.1.3 Script -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+        <!-- Main Admin Script -->
+        <script src="{{ asset('bundles/admin/js/scripts.js') }}"></script>
+        <!-- Custom Scripts Section -->
+        {% block scripts %}{% endblock %}
+    </body>
+</html>
