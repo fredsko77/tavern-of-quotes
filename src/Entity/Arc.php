@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ArcRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArcRepository::class)]
@@ -13,7 +15,7 @@ class Arc
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 100)]
     private $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -25,7 +27,7 @@ class Arc
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $image;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: 'boolean', nullable: true)]
     private $isLocked;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -33,6 +35,18 @@ class Arc
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $updatedAt;
+
+    #[ORM\OneToMany(mappedBy: 'arc', targetEntity: Quote::class)]
+    private $quotes;
+
+    #[ORM\OneToMany(mappedBy: 'arc', targetEntity: Score::class)]
+    private $scores;
+
+    public function __construct()
+    {
+        $this->quotes = new ArrayCollection();
+        $this->scores = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +133,66 @@ class Arc
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Quote>
+     */
+    public function getQuotes(): Collection
+    {
+        return $this->quotes;
+    }
+
+    public function addQuote(Quote $quote): self
+    {
+        if (!$this->quotes->contains($quote)) {
+            $this->quotes[] = $quote;
+            $quote->setArc($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuote(Quote $quote): self
+    {
+        if ($this->quotes->removeElement($quote)) {
+            // set the owning side to null (unless already changed)
+            if ($quote->getArc() === $this) {
+                $quote->setArc(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Score>
+     */
+    public function getScores(): Collection
+    {
+        return $this->scores;
+    }
+
+    public function addScore(Score $score): self
+    {
+        if (!$this->scores->contains($score)) {
+            $this->scores[] = $score;
+            $score->setArc($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScore(Score $score): self
+    {
+        if ($this->scores->removeElement($score)) {
+            // set the owning side to null (unless already changed)
+            if ($score->getArc() === $this) {
+                $score->setArc(null);
+            }
+        }
 
         return $this;
     }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -38,6 +40,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'text', nullable: true)]
     private $biography;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Score::class)]
+    private $scores;
+
+    public function __construct()
+    {
+        $this->scores = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -165,6 +175,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBiography(?string $biography): self
     {
         $this->biography = $biography;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Score>
+     */
+    public function getScores(): Collection
+    {
+        return $this->scores;
+    }
+
+    public function addScore(Score $score): self
+    {
+        if (!$this->scores->contains($score)) {
+            $this->scores[] = $score;
+            $score->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScore(Score $score): self
+    {
+        if ($this->scores->removeElement($score)) {
+            // set the owning side to null (unless already changed)
+            if ($score->getUser() === $this) {
+                $score->setUser(null);
+            }
+        }
 
         return $this;
     }

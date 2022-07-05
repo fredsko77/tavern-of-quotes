@@ -14,4 +14,6 @@ return [
     Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
     Admin\AdminBundle::class => ['all' => true],
     Import\ImportBundle::class => ['all' => true],
+    Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
+    Knp\Bundle\PaginatorBundle\KnpPaginatorBundle::class => ['all' => true],
 ];
