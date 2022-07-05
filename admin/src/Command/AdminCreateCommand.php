@@ -1,6 +1,6 @@
 <?php
 
-namespace Import\Command;
+namespace Admin\Command;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,10 +15,10 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
-    name: 'import:create-admin',
+    name: 'admin:create',
     description: 'Create an admin user',
 )]
-class ImportCreateAdminCommand extends Command
+class AdminCreateCommand extends Command
 {
 
     public function __construct(
@@ -64,7 +64,8 @@ class ImportCreateAdminCommand extends Command
         $user->setUsername($username)
             ->setPassword($this->hasher->hashPassword($user, $password))
             ->setEmail($email)
-            ->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
+            ->setRoles(['ROLE_ADMIN', 'ROLE_USER'])
+            ->setCreatedAt(new \DateTimeImmutable);
 
         $this->manager->persist($user);
         $this->manager->flush();
