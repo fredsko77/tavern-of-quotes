@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Admin\Entity\Request;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -44,9 +45,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Score::class)]
     private $scores;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Request::class)]
+    private $requests;
+
     public function __construct()
     {
         $this->scores = new ArrayCollection();
+        $this->requests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -203,6 +208,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($score->getUser() === $this) {
                 $score->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Request>
+     */
+    public function getRequests(): Collection
+    {
+        return $this->requests;
+    }
+
+    public function addRequest(Request $request): self
+    {
+        if (!$this->requests->contains($request)) {
+            $this->requests[] = $request;
+            $request->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequest(Request $request): self
+    {
+        if ($this->requests->removeElement($request)) {
+            // set the owning side to null (unless already changed)
+            if ($request->getUser() === $this) {
+                $request->setUser(null);
             }
         }
 
