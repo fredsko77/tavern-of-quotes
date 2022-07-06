@@ -42,10 +42,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'text', nullable: true)]
     private $biography;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Score::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Score::class, cascade: ['persist', 'remove'])]
     private $scores;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Request::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Request::class, cascade: ['persist', 'remove'])]
     private $requests;
 
     public function __construct()

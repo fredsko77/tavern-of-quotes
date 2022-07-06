@@ -33,7 +33,7 @@ class Quote
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $updatedAt;
 
-    #[ORM\OneToMany(mappedBy: 'quote', targetEntity: Answer::class)]
+    #[ORM\OneToMany(mappedBy: 'quote', targetEntity: Answer::class, cascade: ['persist', 'remove'])]
     private $answers;
 
     #[ORM\ManyToOne(targetEntity: Arc::class, inversedBy: 'quotes')]

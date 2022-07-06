@@ -36,11 +36,14 @@ class Arc
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $updatedAt;
 
-    #[ORM\OneToMany(mappedBy: 'arc', targetEntity: Quote::class)]
+    #[ORM\OneToMany(mappedBy: 'arc', targetEntity: Quote::class, cascade: ['persist', 'remove'])]
     private $quotes;
 
-    #[ORM\OneToMany(mappedBy: 'arc', targetEntity: Score::class)]
+    #[ORM\OneToMany(mappedBy: 'arc', targetEntity: Score::class, cascade: ['persist', 'remove'])]
     private $scores;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $slug;
 
     public function __construct()
     {
@@ -193,6 +196,18 @@ class Arc
                 $score->setArc(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

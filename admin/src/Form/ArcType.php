@@ -1,6 +1,6 @@
 <?php
 
-namespace Import\Form;
+namespace Admin\Form;
 
 use App\Entity\Arc;
 use Symfony\Component\Form\AbstractType;
