@@ -22,7 +22,9 @@ class ArcType extends AbstractType
                 'required' => true,
                 'label' => 'Nom de l\'arc',
             ])
-            ->add('position', IntegerType::class)
+            ->add('position', IntegerType::class, [
+                'required' => false,
+            ])
             ->add('uploadedFile', FileType::class, [
                 'label' => 'Importer (.csv)',
                 // unmapped means that this field is not associated to any entity property
@@ -34,7 +36,7 @@ class ArcType extends AbstractType
                 // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
                     new File([
-                        'maxSize' => '4096k',
+                        'maxSize' => '1024k',
                         'mimeTypesMessage' => 'Please upload a valid CSV document',
                     ])
                 ],

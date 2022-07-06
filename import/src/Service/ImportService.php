@@ -21,7 +21,7 @@ class ImportService
     ) {
     }
 
-    public function importQuestions(UploadedFile $file, Arc $arc): void
+    public function importQuotes(UploadedFile $file, Arc $arc): void
     {
         $arc
             ->setSlug(strtolower($this->slugger->slug($arc->getName())))

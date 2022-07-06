@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AnswerRepository::class)]
 class Answer
@@ -14,6 +15,7 @@ class Answer
     private $id;
 
     #[ORM\Column(type: 'string', length: 150)]
+    #[Assert\NotBlank]
     private $label;
 
     #[ORM\ManyToOne(targetEntity: Quote::class, inversedBy: 'answers')]

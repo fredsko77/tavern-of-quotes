@@ -3,7 +3,7 @@
 namespace Import\Controller;
 
 use App\Entity\Arc;
-use Import\Form\ArcType;
+use Admin\Form\ArcType;
 use Import\Service\ImportService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
