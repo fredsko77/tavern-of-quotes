@@ -24,7 +24,7 @@ class ImportService
     public function importQuotes(UploadedFile $file, Arc $arc): void
     {
         $arc
-            ->setSlug(strtolower($this->slugger->slug($arc->getName())))
+            ->setSlug($this->slugger->slug($arc->getName()))
             ->setCreatedAt(new DateTimeImmutable);
 
         $data = [];

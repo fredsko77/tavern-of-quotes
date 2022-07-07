@@ -51,6 +51,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Request::class, cascade: ['persist', 'remove'])]
     private $requests;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $slug;
+
+    /** User Roles Constants */
+    public const ROLE_SUPER_ADMIN = "Super Administrateur";
+    public const ROLE_ADMIN = "Administrateur";
+    public const ROLE_USER = "Utilisateur";
+
     public function __construct()
     {
         $this->scores = new ArrayCollection();
@@ -243,6 +251,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $request->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public static function userRoles(): array
+    {
+        return [
+            self::ROLE_USER => "ROLE_USER",
+            self::ROLE_ADMIN => "ROLE_ADMIN",
+            self::ROLE_SUPER_ADMIN => "ROLE_SUPER_ADMIN",
+        ];
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

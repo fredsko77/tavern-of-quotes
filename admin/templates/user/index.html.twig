@@ -1,0 +1,119 @@
+{% extends "@Admin/base.html.twig" %}
+
+{% block main %}
+
+    <div class="d-flex justify-content-between align-items-center mt-3 mb-4">
+        <h1 class="h3">Liste des utilisateurs</h1>
+        <a href="{{ url("admin_user_create") }}" class="btn btn-success">Nouvel utilisateur</a>
+    </div>
+
+    <div class="filters my-2 row justify-content-between align-content-center">
+        <div class="col-lg-5 col-xl-4">
+            <div class="row">
+                <div class="col-lg-5 col-xl-4">
+                    <select name="nbItems" id="nbItems" class="form-select">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+                <label for="nbItems" class="col-lg-7 col-xl-auto col-form-label">résultats par page</label>
+            </div>
+        </div>
+        <div class="col-lg-5 col-xl-4">
+            <form action="">
+                <div class="input-group">
+                    <input 
+                        type="search" 
+                        name="query"
+                        class="form-control" 
+                        placeholder="Rechercher un utilisateur" 
+                        aria-label="Rechercher" 
+                        aria-describedby="search"
+                        value="{{ query ?? '' }}"
+                    >
+                    <button 
+                        type="submit" 
+                        class="input-group-text" 
+                        id="search"
+                    >Rechercher</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nom d'utilisateur</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Rôles</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <th scope="row">{{ user.id }}</th>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.roles|join(',') }}</td>
+                    <td>
+                        {% if is_granted('user_admin_edit', user) %}
+                            <a 
+                                href="{{ url("admin_user_edit", {
+                                    id: user.id
+                                }) }}" 
+                                class="btn btn-warning"
+                                title="Modifier l'utilisateur"
+                                style="color: #fff;"
+                            ><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a 
+                                href="{{ url("admin_user_delete", {
+                                    id: user.id
+                                }) }}" 
+                                class="btn btn-danger"
+                                title="Supprimer l'utilisateur"
+                            ><i class="fa-regular fa-trash-can"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="col-auto navigation">
+        {{ knp_pagination_render(users) }}
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        window.onload = () => {
+            const currentUrl = new URL(window.location.href);
+            const urlParams = currentUrl.searchParams;
+            const nbItems = urlParams.get('nbItems');
+            const nbItemsSelect = document.querySelector('#nbItems');
+            const query = urlParams.get('query');
+
+            if (nbItems !== null) {
+                nbItemsSelect.querySelector('option[value="' + nbItems + '"]').selected = true;
+            }
+
+            nbItemsSelect.addEventListener('change', (event) => {
+                urlParams.set('nbItems', event.target.value)
+
+                return window.location = currentUrl.href;
+            });
+        
+            if (query === null || query === '') {
+                urlParams.delete('query');
+
+                window.history.pushState({}, '', currentUrl.href);
+            }
+        }
+    </script>
+{% endblock %}
