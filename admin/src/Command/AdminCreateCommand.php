@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[AsCommand(
     name: 'admin:create',
@@ -23,7 +24,8 @@ class AdminCreateCommand extends Command
 
     public function __construct(
         private UserPasswordHasherInterface $hasher,
-        private EntityManagerInterface $manager
+        private EntityManagerInterface $manager,
+        private SluggerInterface $slugger
     ) {
         parent::__construct();
     }
@@ -62,6 +64,7 @@ class AdminCreateCommand extends Command
 
         $user = new User;
         $user->setUsername($username)
+            ->setSlug($this->slugger->slug($user->getUsername()))
             ->setPassword($this->hasher->hashPassword($user, $password))
             ->setEmail($email)
             ->setRoles(['ROLE_ADMIN', 'ROLE_USER'])

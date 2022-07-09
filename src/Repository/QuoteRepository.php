@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Arc;
 use App\Entity\Quote;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Quote>
@@ -39,28 +40,26 @@ class QuoteRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Quote[] Returns an array of Quote objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('q')
-//            ->andWhere('q.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('q.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Quote[] Returns an array of Quote objects
+     */
+    public function findLastQuoteByArc(Arc $arc): array
+    {
+        return $this->createQueryBuilder('q')
+            ->select('MAX(q.position)')
+            ->andWhere('q.arc = :arc')
+            ->setParameter('arc', $arc)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
-//    public function findOneBySomeField($value): ?Quote
-//    {
-//        return $this->createQueryBuilder('q')
-//            ->andWhere('q.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Quote
+    //    {
+    //        return $this->createQueryBuilder('q')
+    //            ->andWhere('q.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }
