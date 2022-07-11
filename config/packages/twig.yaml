@@ -1,7 +1,6 @@
 twig:
     paths: 
         - '%kernel.project_dir%/templates'
-        - '%kernel.project_dir%/admin/templates'
     form_themes:    
         - 'bootstrap_5_layout.html.twig'    
 

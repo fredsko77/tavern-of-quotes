@@ -33,7 +33,7 @@ class UserService
      * 
      * @return void
      */
-    public function create(User $user, ?string $password): void
+    public function create(User $user, ?string $password = null): void
     {
         $user->setCreatedAt(new DateTimeImmutable)
             ->setSlug($this->slugger->slug($user->getUsername()))
