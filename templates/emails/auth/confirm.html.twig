@@ -1,0 +1,9 @@
+{% extends "emails/layouts.html.twig" %}
+
+{% block body %}
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, adipisci. Impedit illo iure <p>
+        You signed up as {{ user.username }} the following email:
+    </p>
+
+    <img src="{{ email.image('logo-sunny.png') }}" alt="Logo du site">
+{% endblock %}

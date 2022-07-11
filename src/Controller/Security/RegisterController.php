@@ -2,13 +2,14 @@
 
 namespace App\Controller\Security;
 
-use Admin\Service\UserService;
 use App\Entity\User;
+use App\Mailing\AuthMailing;
+use Admin\Service\UserService;
 use App\Form\RegistrationType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class RegisterController extends AbstractController
@@ -42,5 +43,13 @@ class RegisterController extends AbstractController
         }
 
         return $this->renderForm('auth/register.html.twig', compact('form'));
+    }
+
+    #[Route('/test/email/{id}', name: 'test_email', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function testEmail(User $user, AuthMailing $mailing): Response
+    {
+        $mailing->confirmEmail($user);
+
+        return $this->render('base.html.twig');
     }
 }
