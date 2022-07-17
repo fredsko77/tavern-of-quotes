@@ -39,6 +39,15 @@ class Quote
     #[ORM\ManyToOne(targetEntity: Arc::class, inversedBy: 'quotes')]
     private $arc;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $image;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private $explanation;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $slug;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -159,6 +168,42 @@ class Quote
     public function setArc(?Arc $arc): self
     {
         $this->arc = $arc;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getExplanation(): ?string
+    {
+        return $this->explanation;
+    }
+
+    public function setExplanation(?string $explanation): self
+    {
+        $this->explanation = $explanation;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

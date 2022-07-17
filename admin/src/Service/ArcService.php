@@ -5,8 +5,11 @@ namespace Admin\Service;
 use App\Entity\Arc;
 use DateTimeImmutable;
 use App\Repository\ArcRepository;
+use App\Repository\QuoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
 use Import\Service\ArcService as ServiceArcService;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -24,7 +27,9 @@ class ArcService
         private SluggerInterface $slugger,
         private ContainerBagInterface $container,
         private ServiceArcService $arcService,
-        private Filesystem $filesystem
+        private Filesystem $filesystem,
+        private QuoteRepository $quoteRepository,
+        private PaginatorInterface $paginator
     ) {
     }
 
@@ -137,5 +142,19 @@ class ArcService
         if (is_string($arc->getImage())) {
             $this->filesystem->remove($this->getPublicDir() . $arc->getImage());
         }
+    }
+
+    public function quotes(Arc $arc, Request $request): array
+    {
+        $page = $request->query->getInt('page', 1);
+        $nbItems = $request->query->getInt('nbItems', 15);
+
+        $quotes = $this->paginator->paginate(
+            $this->quoteRepository->findby(['arc' => $arc]),
+            $page,
+            $nbItems
+        );
+
+        return compact('quotes', 'arc');
     }
 }

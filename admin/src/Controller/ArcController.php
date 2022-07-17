@@ -93,4 +93,15 @@ class ArcController extends AbstractController
 
         return $this->redirectToRoute('admin_arc_index');
     }
+
+    #[Route(
+        '/{id}/quotes',
+        name: 'quotes',
+        methods: ['GET'],
+        requirements: ['id' => '\d+']
+    )]
+    public function quotes(Arc $arc, Request $request): Response
+    {
+        return $this->render('@Admin/quote/index.html.twig', $this->service->quotes($arc, $request));
+    }
 }

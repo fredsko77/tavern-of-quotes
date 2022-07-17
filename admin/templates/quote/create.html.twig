@@ -1,0 +1,53 @@
+{% extends "@Admin/base.html.twig" %}
+
+{% block main %}
+
+    <h1 class="h3">Créer une citation</h1>
+
+    {{ form_start(form) }}
+
+        {{ form_row(form.content) }}
+        
+        {{ form_row(form.coeur) }}
+
+        {{ form_row(form.uploadedFile) }}
+
+        {# store the prototype on the data-prototype attribute #}
+        <div class="group-skill-list">
+            <label for="#" class="form-label">
+                Les réponses
+                <span 
+                    id="add-answer" 
+                    class="btn btn-sm btn-success" 
+                    data-list-selector="#answer-field-list"
+                ><i class="fa-solid fa-plus"></i></span>
+            </label>
+            <div 
+                id="answer-field-list"
+                data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}"
+                data-widget-tags="{{ '<div></div>'|e }}"
+                data-widget-counter="{{ form.answers|length }}"
+            >
+                {% for answer in form.answers %}
+                    <div class="row">
+                        <div class="col-11">
+                            {{ form_row(answer) }}
+                        </div>
+                        <div class="col-1">
+                            <span 
+                                class="btn btn-danger" 
+                                onclick="deleteAnswer(event)"
+                            ><i class="fa-solid fa-trash-can"></i></span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('bundles/admin/js/quote/collection-type.js') }}"></script>
+{% endblock %}
