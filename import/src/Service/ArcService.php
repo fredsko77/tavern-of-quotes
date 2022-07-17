@@ -7,6 +7,7 @@ use App\Entity\Arc;
 use App\Entity\Question;
 use App\Entity\Quote;
 use App\Repository\QuoteRepository;
+use App\Utils\HelperTrait;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ArcService
 {
+    use HelperTrait;
+
     use ImportTrait;
 
     public function __construct(
@@ -54,7 +57,12 @@ class ArcService
                     ->setPosition($position)
                     ->setContent($v->citation)
                     ->setCoeur((bool) $v->coeur)
-                    ->setCreatedAt(new DateTimeImmutable);
+                    ->setCreatedAt(new DateTimeImmutable)
+                    ->setSlug(
+                        $this->slugger->slug(
+                            $this->skipAccents($quote->getContent())
+                        )
+                    );
 
                 $quote->addAnswer((new Answer())->setLabel($v->reponse));
                 $arc->addQuote($quote);
